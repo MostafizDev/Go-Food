@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
-import 'package:go_food/src/pages/details/details_screen.dart';
+import 'package:go_food/src/pages/productDetails/details_screen.dart';
 import 'package:go_food/src/widgets/orderCard.dart';
 
-import 'customText.dart';
+import '../../../widgets/customText.dart';
 
 class ProductListCard extends StatefulWidget {
   final String productName;
@@ -13,7 +13,8 @@ class ProductListCard extends StatefulWidget {
   final String productPriceWithCode;
   final String productDescription;
   final String productCategory;
-  final String relatedProducts;
+  final List<RelatedProducts> relatedProducts;
+  final List<VariantGroups> variantGroups;
   final ProductModel productModel;
 
   const ProductListCard({
@@ -25,6 +26,7 @@ class ProductListCard extends StatefulWidget {
     this.productDescription,
     this.productCategory,
     this.relatedProducts,
+    this.variantGroups,
     this.productModel,
   }) : super(key: key);
 
@@ -61,6 +63,8 @@ class _ProductListCardState extends State<ProductListCard> {
                       productName: widget.productName,
                       productDescription: widget.productDescription,
                       productPrice: widget.productPriceWithCode,
+                      variantGroups: widget.variantGroups,
+                      relatedProducts: widget.relatedProducts,
                     )),
           );
         },
@@ -90,14 +94,6 @@ class _ProductListCardState extends State<ProductListCard> {
     );
   }
 
-  Icon starIcon(Color color) {
-    return Icon(
-      Icons.star,
-      size: 10.0,
-      color: color,
-    );
-  }
-
   _detail() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -115,8 +111,10 @@ class _ProductListCardState extends State<ProductListCard> {
             color: Colors.grey,
           ),*/
           Text(
-            //widget.productCategory == null ? 'Category' : widget.productCategory,
-            'Category',
+            widget.productCategory == null
+                ? 'Category'
+                : widget.productCategory,
+            //'Category',
             style: cardDescriptionTextStyle,
           ),
           Row(

@@ -144,7 +144,8 @@ class _OrderPageState extends State<OrderPage> {
                 borderRadius: BorderRadius.circular(35.0)),
             child: FlatButton(
               onPressed: () {
-                Navigator.of(context).popAndPushNamed("SignInPage");
+                /*Navigator.of(context).popAndPushNamed("SignInPage");*/
+                Text('CheckOut');
               },
               child: Text(
                 "Proceed to Checkout",

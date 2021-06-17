@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/pages/homePage.dart';
+import 'package:go_food/src/pages/homepage/homePage.dart';
 import 'package:go_food/src/pages/signInPage.dart';
 import 'package:go_food/src/pages/signUpPage.dart';
 import 'package:go_food/src/screens/homeScreen.dart';

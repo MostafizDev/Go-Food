@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/dimentions.dart';
-import 'package:go_food/src/widgets/ProductList.dart';
+import 'package:go_food/src/pages/homepage/components/ProductList.dart';
 import 'package:go_food/src/widgets/boughtFood.dart';
-import 'package:go_food/src/widgets/foodCategory.dart';
-import 'package:go_food/src/widgets/homeTopInfo.dart';
-import 'package:go_food/src/widgets/search_file.dart';
+import 'package:go_food/src/pages/homepage/components/foodCategory.dart';
+import 'package:go_food/src/pages/homepage/components/homeTopInfo.dart';
+import 'package:go_food/src/pages/homepage/components/search_file.dart';
 
 class HomePage extends StatefulWidget {
   @override

@@ -3,9 +3,12 @@ import 'dart:ui';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:go_food/src/constants/constants.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
-import 'package:go_food/src/widgets/ProductList.dart';
+import 'package:go_food/src/pages/homepage/components/ProductList.dart';
+import 'package:go_food/src/pages/productDetails/components/RelatedProductsList.dart';
+import 'package:go_food/src/pages/productDetails/components/relatedProductCard.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -13,12 +16,17 @@ class DetailsScreen extends StatefulWidget {
   String productName;
   String productDescription;
   String productPrice;
+  List<RelatedProducts> relatedProducts;
+  List<VariantGroups> variantGroups;
 
-  DetailsScreen(
-      {this.productImage,
-      this.productName,
-      this.productDescription,
-      this.productPrice});
+  DetailsScreen({
+    this.productImage,
+    this.productName,
+    this.productDescription,
+    this.productPrice,
+    this.relatedProducts,
+    this.variantGroups,
+  });
 
   @override
   _DetailsScreenState createState() => _DetailsScreenState();
@@ -111,15 +119,26 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               : widget.productPrice,
                           style: priceTextStyle,
                         ),
-                        Text("Ratings"),
+                        Row(
+                          children: [
+                            Text('3.5 '),
+                            starIcon(Colors.orange),
+                          ],
+                        ),
+                        //Text('${starIcon(Colors.orange)}'+'3.5'), //Ratings
                       ],
                     ),
+
+                    // Description
                     Padding(
                       padding: EdgeInsets.only(
                         top: Dimentions.padding16,
                       ),
                       child: ExpandablePanel(
                         theme: ExpandableThemeData(
+                          tapHeaderToExpand: true,
+                          tapBodyToExpand: true,
+                          tapBodyToCollapse: true,
                           iconColor: Colors.blue,
                         ),
                         header: Text(
@@ -152,6 +171,28 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         ),
                       ),
                     ),
+
+                    //Related Product
+
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: Dimentions.padding10,
+                        bottom: Dimentions.padding10,
+                      ),
+                      child: Text(
+                        'Related Products',
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    RelatedProductsList(
+                      relatedProducts: widget.relatedProducts,
+                    ) == null? Text("No Related Products") : RelatedProductsList(
+                      relatedProducts: widget.relatedProducts,
+                    ),
                   ],
                 ),
               ),
@@ -163,116 +204,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 }
 
-/*_buildContent(BuildContext context) {
-  return SlidingUpPanel(
-    maxHeight: MediaQuery.of(context).size.height * .8,
-    minHeight: MediaQuery.of(context).size.height * .25,
-    panel: Center(
-      child: ListView(
-        physics: NeverScrollableScrollPhysics(),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text("This is the sliding Widget"),
-          ),
-        ],
-      ),
-    ),
+Icon starIcon(Color color) {
+  return Icon(
+    Icons.star,
+    size: 10.0,
+    color: color,
   );
-}*/
+}

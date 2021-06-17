@@ -8,7 +8,6 @@ class ProductModel {
     if (json['data'] != null) {
       data = new List<Data>();
       json['data'].forEach((v) {
-        print(v);
         data.add(new Data.fromJson(v));
       });
     }
@@ -44,43 +43,42 @@ class Data {
   Null thankYouUrl;
   Null meta;
   Conditionals conditionals;
-
-  //Is is;
+  Is ok;
   Has has;
   Collects collects;
   CheckoutUrl checkoutUrl;
   List<Null> extraFields;
-  List<Null> variantGroups;
+  List<VariantGroups> variantGroups;
   List<Categories> categories;
   List<Assets> assets;
-  List<Null> relatedProducts;
+  List<RelatedProducts> relatedProducts;
 
-  Data({
-    this.id,
-    this.created,
-    this.updated,
-    this.active,
-    this.permalink,
-    this.name,
-    this.description,
-    this.price,
-    this.inventory,
-    this.media,
-    this.sku,
-    this.sortOrder,
-    this.seo,
-    this.thankYouUrl,
-    this.meta,
-    this.conditionals,
-    this.has,
-    this.collects,
-    this.checkoutUrl,
-    this.extraFields,
-    this.variantGroups,
-    this.categories,
-    this.assets,
-    this.relatedProducts,
-  });
+  Data(
+      {this.id,
+      this.created,
+      this.updated,
+      this.active,
+      this.permalink,
+      this.name,
+      this.description,
+      this.price,
+      this.inventory,
+      this.media,
+      this.sku,
+      this.sortOrder,
+      this.seo,
+      this.thankYouUrl,
+      this.meta,
+      this.conditionals,
+      this.ok,
+      this.has,
+      this.collects,
+      this.checkoutUrl,
+      this.extraFields,
+      this.variantGroups,
+      this.categories,
+      this.assets,
+      this.relatedProducts});
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -103,7 +101,7 @@ class Data {
     conditionals = json['conditionals'] != null
         ? new Conditionals.fromJson(json['conditionals'])
         : null;
-//is = json['is'] != null ? new Is.fromJson(json['is']) : null;
+    ok = json['is'] != null ? new Is.fromJson(json['is']) : null;
     has = json['has'] != null ? new Has.fromJson(json['has']) : null;
     collects = json['collects'] != null
         ? new Collects.fromJson(json['collects'])
@@ -111,13 +109,12 @@ class Data {
     checkoutUrl = json['checkout_url'] != null
         ? new CheckoutUrl.fromJson(json['checkout_url'])
         : null;
-    if (json['extra_fields'] != null) {
-      extraFields = new List<Null>();
-//json['extra_fields'].forEach((v) { extraFields.add(new Null.fromJson(v)); });
-    }
+
     if (json['variant_groups'] != null) {
-      variantGroups = new List<Null>();
-//json['variant_groups'].forEach((v) { variantGroups.add(new Null.fromJson(v)); });
+      variantGroups = new List<VariantGroups>();
+      json['variant_groups'].forEach((v) {
+        variantGroups.add(new VariantGroups.fromJson(v));
+      });
     }
     if (json['categories'] != null) {
       categories = new List<Categories>();
@@ -132,8 +129,10 @@ class Data {
       });
     }
     if (json['related_products'] != null) {
-      relatedProducts = new List<Null>();
-//json['related_products'].forEach((v) { relatedProducts.add(new Null.fromJson(v)); });
+      relatedProducts = new List<RelatedProducts>();
+      json['related_products'].forEach((v) {
+        relatedProducts.add(new RelatedProducts.fromJson(v));
+      });
     }
   }
 
@@ -165,9 +164,9 @@ class Data {
     if (this.conditionals != null) {
       data['conditionals'] = this.conditionals.toJson();
     }
-    /*if (this.is != null) {
-    data['is'] = this.is.toJson();
-  }*/
+    if (this.ok != null) {
+      data['is'] = this.ok.toJson();
+    }
     if (this.has != null) {
       data['has'] = this.has.toJson();
     }
@@ -177,23 +176,20 @@ class Data {
     if (this.checkoutUrl != null) {
       data['checkout_url'] = this.checkoutUrl.toJson();
     }
-    /* if (this.extraFields != null) {
-      data['extra_fields'] = this.extraFields.map((v) => v.toJson()).toList();
-    }*/
-    /*if (this.variantGroups != null) {
+    if (this.variantGroups != null) {
       data['variant_groups'] =
           this.variantGroups.map((v) => v.toJson()).toList();
-    }*/
+    }
     if (this.categories != null) {
       data['categories'] = this.categories.map((v) => v.toJson()).toList();
     }
     if (this.assets != null) {
       data['assets'] = this.assets.map((v) => v.toJson()).toList();
     }
-    /*if (this.relatedProducts != null) {
+    if (this.relatedProducts != null) {
       data['related_products'] =
           this.relatedProducts.map((v) => v.toJson()).toList();
-    }*/
+    }
     return data;
   }
 }
@@ -475,6 +471,93 @@ class CheckoutUrl {
   }
 }
 
+class VariantGroups {
+  String id;
+  String name;
+  Null meta;
+  int created;
+  int updated;
+  List<Options> options;
+
+  VariantGroups(
+      {this.id,
+      this.name,
+      this.meta,
+      this.created,
+      this.updated,
+      this.options});
+
+  VariantGroups.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    meta = json['meta'];
+    created = json['created'];
+    updated = json['updated'];
+    if (json['options'] != null) {
+      options = new List<Options>();
+      json['options'].forEach((v) {
+        options.add(new Options.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['meta'] = this.meta;
+    data['created'] = this.created;
+    data['updated'] = this.updated;
+    if (this.options != null) {
+      data['options'] = this.options.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Options {
+  String id;
+  String name;
+  Price price;
+  List<String> assets;
+  Null meta;
+  int created;
+  int updated;
+
+  Options(
+      {this.id,
+      this.name,
+      this.price,
+      this.assets,
+      this.meta,
+      this.created,
+      this.updated});
+
+  Options.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    price = json['price'] != null ? new Price.fromJson(json['price']) : null;
+    assets = json['assets'].cast<String>();
+    meta = json['meta'];
+    created = json['created'];
+    updated = json['updated'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    if (this.price != null) {
+      data['price'] = this.price.toJson();
+    }
+    data['assets'] = this.assets;
+    data['meta'] = this.meta;
+    data['created'] = this.created;
+    data['updated'] = this.updated;
+    return data;
+  }
+}
+
 class Categories {
   String id;
   String slug;
@@ -534,12 +617,6 @@ class Assets {
     imageDimensions = json['image_dimensions'] != null
         ? new ImageDimensions.fromJson(json['image_dimensions'])
         : null;
-    if (json['meta'] != null) {
-      meta = new List<Null>();
-      json['meta'].forEach((v) {
-        // meta.add(new Null.fromJson(v));
-      });
-    }
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -555,9 +632,6 @@ class Assets {
     data['file_extension'] = this.fileExtension;
     if (this.imageDimensions != null) {
       data['image_dimensions'] = this.imageDimensions.toJson();
-    }
-    if (this.meta != null) {
-      //data['meta'] = this.meta.map((v) => v.toJson()).toList();
     }
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
@@ -580,6 +654,55 @@ class ImageDimensions {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['width'] = this.width;
     data['height'] = this.height;
+    return data;
+  }
+}
+
+class RelatedProducts {
+  String id;
+  String name;
+  Null sku;
+  String permalink;
+  String description;
+  Price price;
+  int quantity;
+  Media media;
+
+  RelatedProducts(
+      {this.id,
+      this.name,
+      this.sku,
+      this.permalink,
+      this.description,
+      this.price,
+      this.quantity,
+      this.media});
+
+  RelatedProducts.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    sku = json['sku'];
+    permalink = json['permalink'];
+    description = json['description'];
+    price = json['price'] != null ? new Price.fromJson(json['price']) : null;
+    quantity = json['quantity'];
+    media = json['media'] != null ? new Media.fromJson(json['media']) : null;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['sku'] = this.sku;
+    data['permalink'] = this.permalink;
+    data['description'] = this.description;
+    if (this.price != null) {
+      data['price'] = this.price.toJson();
+    }
+    data['quantity'] = this.quantity;
+    if (this.media != null) {
+      data['media'] = this.media.toJson();
+    }
     return data;
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/pages/homePage.dart';
+import 'package:go_food/src/pages/homepage/homePage.dart';
 import 'package:go_food/src/pages/orderPage.dart';
-import 'package:go_food/src/pages/profilePage.dart';
+import 'package:go_food/src/pages/profile/profilePage.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int currentTabIndex = 0;
+  GlobalKey _bottomNavigationKey = GlobalKey();
 
   HomePage homePage;
   OrderPage orderPage;
@@ -53,9 +55,41 @@ class _MainScreenState extends State<MainScreen> {
                   backgroundColor: Colors.white,
                   elevation: 0.0,
                 )
-              : null,
-      body: currentPage,
-      bottomNavigationBar: BottomNavigationBar(
+              : currentTabIndex == 2
+                  ? AppBar(
+                      title: Text(
+                        'Profile',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      centerTitle: true,
+                      backgroundColor: Colors.white,
+                      elevation: 0.0,
+                    )
+                  : null,
+      //body: currentPage,
+      body: currentTabIndex == 0 ? homePage : currentTabIndex == 1 ? orderPage : currentTabIndex == 0 ? profilePage : null,
+      bottomNavigationBar: CurvedNavigationBar(
+        key: _bottomNavigationKey,
+        index: 0,
+        height: 50.0,
+        items: <Widget>[
+          Icon(Icons.home_outlined, size: 30),
+          Icon(Icons.shopping_cart_outlined, size: 30),
+          Icon(Icons.perm_identity, size: 30),
+        ],
+        color: Colors.orange,
+        buttonBackgroundColor: Colors.orangeAccent,
+        backgroundColor: Colors.white,
+        animationCurve: Curves.easeInOutSine,
+        animationDuration: Duration(milliseconds: 600),
+        onTap: (index) {
+          setState(() {
+            currentTabIndex = index;
+          });
+        },
+        letIndexChange: (index) => true,
+      ),
+      /*bottomNavigationBar: BottomNavigationBar(
         onTap: (int index) {
           setState(() {
             currentTabIndex = index;
@@ -78,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
             title: Text("Profile"),
           ),
         ],
-      ),
+      ),*/
     );
   }
 }

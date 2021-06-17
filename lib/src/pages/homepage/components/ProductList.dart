@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
-import 'package:go_food/src/widgets/productListCard.dart';
+import 'package:go_food/src/pages/homepage/components/productListCard.dart';
 
 class ProductList extends StatefulWidget {
   @override
@@ -44,12 +44,14 @@ class ProductListState extends State<ProductList> {
         ),
         itemCount: productModel == null ? 0 : productModel.data.length,
         itemBuilder: (BuildContext context, int index) {
+
           return ProductListCard(
             productName: productModel.data[index].name,
             productPriceWithSymbol: productModel.data[index].price.formattedWithSymbol,
             productPriceWithCode: productModel.data[index].price.formattedWithCode,
-            //productCategory: productModel.data[index].categories[index].name,
-            //relatedProducts: productModel.data[index].relatedProducts.first,
+            productCategory: productModel.data[index].categories.map((e) => e.name).toList().toString().replaceAll('[', '').replaceAll(']', ''),
+            relatedProducts: productModel.data[index].relatedProducts,
+            variantGroups: productModel.data[index].variantGroups,
             productImage: productModel.data[index].media.source,
             productDescription: productModel.data[index].description,
           );

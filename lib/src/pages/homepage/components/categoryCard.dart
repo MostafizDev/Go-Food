@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_food/src/Services/APIClient.dart';
+import 'package:go_food/src/constants/constants.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -44,21 +45,17 @@ class _CategoryCardState extends State<CategoryCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: kPrimaryLightColor,
       elevation: 2.0,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-        child: Row(
-          children: [
-            SizedBox(width: 20.0,),
+        child:
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(widget.categoryName, style: cardTextStyle,),
-                Text(widget.categoryDescription, style: cardTextStyle,),
               ],
             ),
-          ],
-        ),
       ),
     );
   }

@@ -23,6 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
     );
   }
+
   Widget _buildUsernameTextFormField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -54,6 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
       obscureText: _toggleVisbility,
     );
   }
+
   Widget _buildConfirmPasswordTextFormField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -113,7 +115,9 @@ class _SignUpPageState extends State<SignUpPage> {
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(35.0)),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).popAndPushNamed("/");
+                },
                 child: Text(
                   "Sign Up",
                   style: TextStyle(
@@ -151,4 +155,3 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-

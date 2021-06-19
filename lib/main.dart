@@ -14,9 +14,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Go Food',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.orange,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      //initialRoute: 'ScreenManage',
       initialRoute: '/',
       onGenerateRoute: RouteGenerator.generateRoute,
     );

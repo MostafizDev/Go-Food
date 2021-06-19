@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/constants.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
-import 'package:go_food/src/pages/productDetails/details_screen.dart';
+import 'package:go_food/src/pages/productDetails/detailsPage.dart';
 import 'package:go_food/src/widgets/customText.dart';
 
 class RelatedProductsCard extends StatefulWidget {
@@ -63,7 +63,7 @@ class _RelatedProductsCardState extends State<RelatedProductsCard> {
                 height: 150,
                 width: 150,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(15),
                   /*image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
@@ -95,9 +95,9 @@ class _RelatedProductsCardState extends State<RelatedProductsCard> {
                   height: 35,
                   child: Center(
                       child: Text(
-                    widget.relatedProductPrice,
+                    widget.relatedProductPrice.replaceAll('.00', ''),
                     style: TextStyle(
-                        fontSize: 11,
+                        fontSize: 12,
                         color: Colors.white,
                         fontWeight: FontWeight.bold),
                   )),
@@ -107,26 +107,23 @@ class _RelatedProductsCardState extends State<RelatedProductsCard> {
                       border: Border.all(width: 5, color: Colors.white)),
                 ),
               ),
-              FractionalTranslation(
-                translation: Offset(0, 0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 0.0),
-                      child: CustomText(
-                        text: "${widget.relatedProductName}",
-                        size: 22,
-                        weight: FontWeight.bold,
-                      ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0.0),
+                    child: CustomText(
+                      text: "${widget.relatedProductName}",
+                      size: 22,
+                      weight: FontWeight.bold,
                     ),
-                    IconButton(
-                        icon: Icon(Icons.add_shopping_cart),
-                        onPressed: () {
-                          //cartController.addProductToCart(product);
-                        })
-                  ],
-                ),
+                  ),
+                  IconButton(
+                      icon: Icon(Icons.add_shopping_cart, color: kPrimaryColor,),
+                      onPressed: () {
+                        //cartController.addProductToCart(product);
+                      })
+                ],
               ),
 
             ],

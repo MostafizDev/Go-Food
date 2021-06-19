@@ -34,13 +34,14 @@ class ProductListState extends State<ProductList> {
       height: MediaQuery.of(context).size.height*.75,
       width: 150.0,
       child: GridView.builder(
+        //physics: AlwaysScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.5,
           //padding: const EdgeInsets.all(10),
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10,
+          mainAxisSpacing: 5,
+          crossAxisSpacing: 5,
         ),
         itemCount: productModel == null ? 0 : productModel.data.length,
         itemBuilder: (BuildContext context, int index) {

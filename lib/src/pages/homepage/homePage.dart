@@ -5,7 +5,7 @@ import 'package:go_food/src/pages/homepage/components/ProductList.dart';
 import 'package:go_food/src/widgets/boughtFood.dart';
 import 'package:go_food/src/pages/homepage/components/foodCategory.dart';
 import 'package:go_food/src/pages/homepage/components/homeTopInfo.dart';
-import 'package:go_food/src/pages/homepage/components/search_file.dart';
+import 'package:go_food/src/widgets/searchField.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -20,13 +20,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.only(
-          left: Dimentions.padding16,
-          right: Dimentions.padding16,
-          top: Dimentions.padding16,
-        ),
+    return Container(
+      height: MediaQuery.of(context).size.height*.8,
+      child: ListView(
         children: [
           HomeTopInfo(),
           paddingBetweenWidgets,

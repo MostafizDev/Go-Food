@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_food/src/constants/constants.dart';
 
 class HomeTopInfo extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class _HomeTopInfoState extends State<HomeTopInfo> {
         Icon(
           Icons.notifications_none_rounded,
           size: 32,
-          color: Theme.of(context).accentColor,
+          color: kPrimaryLightColor,
         ),
       ],
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_food/src/constants/constants.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/widgets/orderCard.dart';
 
@@ -15,12 +16,13 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        padding: EdgeInsets.only(
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: ListView(
+        /*padding: EdgeInsets.only(
           left: Dimentions.padding16,
           right: Dimentions.padding16,
-        ),
+        ),*/
         scrollDirection: Axis.vertical,
         children: [
           OrderCard(),
@@ -29,10 +31,10 @@ class _OrderPageState extends State<OrderPage> {
           OrderCard(),
           OrderCard(),
           OrderCard(),
-          OrderCard(),
+          _totalContainer(),
         ],
       ),
-      bottomNavigationBar: _totalContainer(),
+      //bottomNavigationBar: _totalContainer(),
     );
   }
 
@@ -140,12 +142,11 @@ class _OrderPageState extends State<OrderPage> {
             width: MediaQuery.of(context).size.width,
             height: 50.0,
             decoration: BoxDecoration(
-                color: Colors.orange,
+                color: kPrimaryLightColor,
                 borderRadius: BorderRadius.circular(35.0)),
             child: FlatButton(
               onPressed: () {
-                /*Navigator.of(context).popAndPushNamed("SignInPage");*/
-                Text('CheckOut');
+                Navigator.of(context).popAndPushNamed("SignInPage");
               },
               child: Text(
                 "Proceed to Checkout",

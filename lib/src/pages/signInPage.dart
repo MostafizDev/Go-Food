@@ -94,7 +94,9 @@ class _SignInPageState extends State<SignInPage> {
                   color: Colors.orange,
                   borderRadius: BorderRadius.circular(35.0)),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).popAndPushNamed("/");
+                },
                 child: Text(
                   "Sign In",
                   style: TextStyle(

@@ -1,15 +1,14 @@
 import 'dart:ui';
 
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:go_food/src/Language.dart';
 import 'package:go_food/src/constants/constants.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
-import 'package:go_food/src/pages/homepage/components/ProductList.dart';
 import 'package:go_food/src/pages/productDetails/components/RelatedProductsList.dart';
-import 'package:go_food/src/pages/productDetails/components/relatedProductCard.dart';
-import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:go_food/src/pages/productDetails/components/variantProductsList.dart';
 
 class DetailsPage extends StatefulWidget {
   String productImage;
@@ -99,97 +98,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 left: Dimentions.padding16,
                 right: Dimentions.padding16,
               ),
-              child: ListView(
-                physics: NeverScrollableScrollPhysics(),
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        widget.productPrice == null
-                            ? '\$\$\$'
-                            : widget.productPrice,
-                        style: priceTextStyle,
-                      ),
-                      Row(
-                        children: [
-                          Text('3.5 '),
-                          starIcon(Colors.orange),
-                        ],
-                      ),
-                      //Text('${starIcon(Colors.orange)}'+'3.5'), //Ratings
-                    ],
-                  ),
-
-                  // Description
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Dimentions.padding16,
-                    ),
-                    child: ExpandablePanel(
-                      theme: ExpandableThemeData(
-                        tapHeaderToExpand: true,
-                        tapBodyToExpand: true,
-                        tapBodyToCollapse: true,
-                        iconColor: Colors.blue,
-                      ),
-                      header: Text(
-                        'Description',
-                        style: descriptionTextStyle,
-                      ),
-                      expanded: Text(
-                        widget.productDescription
-                                    .replaceAll('<p>', '')
-                                    .replaceAll('</p>', '\n') ==
-                                null
-                            ? 'Food Description'
-                            : widget.productDescription
-                                .replaceAll('<p>', '')
-                                .replaceAll('</p>', '\n'),
-                        softWrap: true,
-                      ),
-                      collapsed: Text(
-                        widget.productDescription
-                                    .replaceAll('<p>', '')
-                                    .replaceAll('</p>', '\n') ==
-                                null
-                            ? 'Food Description'
-                            : widget.productDescription
-                                .replaceAll('<p>', '')
-                                .replaceAll('</p>', '\n'),
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-
-                  //Related Product
-
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: Dimentions.padding10,
-                      bottom: Dimentions.padding10,
-                    ),
-                    child: Text(
-                      'Related Products',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  RelatedProductsList(
-                            relatedProducts: widget.relatedProducts,
-                          ) ==
-                          null
-                      ? Text("No Related Products")
-                      : RelatedProductsList(
-                          relatedProducts: widget.relatedProducts,
-                        ),
-                ],
-              ),
+              child: bodyDescription(),
             ),
           ),
         ],
@@ -198,50 +107,187 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget addToCart() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-      child: Row(
-        children: [
-          Container(
-            height: 50,
-            width: 70,
-            decoration: BoxDecoration(
-                color: kPrimaryColor, borderRadius: BorderRadius.circular(20)),
-            child: Icon(
-              Icons.favorite_border,
-              color: Colors.white,
+  Widget bodyDescription(){
+    return ListView(
+      physics: NeverScrollableScrollPhysics(),
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              widget.productPrice == null
+                  ? '\$\$\$'
+                  : widget.productPrice,
+              style: priceTextStyle,
+            ),
+            Row(
+              children: [
+                Text('3.5 '),
+                starIcon(Colors.orange),
+              ],
+            ),
+            //Text('${starIcon(Colors.orange)}'+'3.5'), //Ratings
+          ],
+        ),
+
+        //Product Variant
+
+        Padding(
+          padding: EdgeInsets.only(
+            top: Dimentions.padding10,
+            bottom: Dimentions.padding10,
+          ),
+          /*child: Text(''),*/
+          child: Text(
+            'We offers',
+            style: TextStyle(
+              color: kPrimaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(
-            width: 10,
+        ),
+        VariantGroupsList(
+          variantsProduct: widget.variantGroups,
+        ),
+
+
+        // Description
+
+        Padding(
+          padding: EdgeInsets.only(
+            top: Dimentions.padding16,
           ),
-          Expanded(
-            child: Container(
+          child: ExpandablePanel(
+            theme: ExpandableThemeData(
+              tapHeaderToExpand: true,
+              tapBodyToExpand: true,
+              tapBodyToCollapse: true,
+              iconColor: Colors.blue,
+            ),
+            header: Text(
+              'Description',
+              style: descriptionTextStyle,
+            ),
+            expanded: Text(
+              widget.productDescription
+                  .replaceAll('<p>', '')
+                  .replaceAll('</p>', '\n') ==
+                  null
+                  ? 'Food Description'
+                  : widget.productDescription
+                  .replaceAll('<p>', '')
+                  .replaceAll('</p>', '\n'),
+              softWrap: true,
+            ),
+            collapsed: Text(
+              widget.productDescription
+                  .replaceAll('<p>', '')
+                  .replaceAll('</p>', '\n') ==
+                  null
+                  ? 'Food Description'
+                  : widget.productDescription
+                  .replaceAll('<p>', '')
+                  .replaceAll('</p>', '\n'),
+              softWrap: true,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+
+
+        //Related Product
+
+        Padding(
+          padding: EdgeInsets.only(
+            top: Dimentions.padding10,
+            bottom: Dimentions.padding10,
+          ),
+          /*child: Text(''),*/
+          child: Text(
+            'You may also can it',
+            style: TextStyle(
+              color: kPrimaryColor,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        RelatedProductsList(
+          relatedProducts: widget.relatedProducts,
+        ) ==
+            null
+            ? Text("No Related Products")
+            : RelatedProductsList(
+          relatedProducts: widget.relatedProducts,
+        ),
+      ],
+    );
+  }
+
+  Widget addToCart() {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        horizontal: Dimentions.padding16,
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: Dimentions.padding16,
+      ),
+      height: 70,
+      decoration: BoxDecoration(
+          color: kPrimaryLightColor,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          )),
+      child: Padding(
+        padding: EdgeInsets.only(left: 16.0, right: 16.0),
+        child: Row(
+          children: [
+            Container(
               height: 50,
+              width: 70,
               decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(20)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    'Add to Cart',
-                    style: TextStyle(color: Colors.white, fontSize: 24),
-                  ),
-                  Icon(
-                    Icons.add_shopping_cart_outlined,
-                    color: Colors.white,
-                  ),
-                ],
+              child: Icon(
+                Icons.favorite_border,
+                color: kPrimaryLightColor,
               ),
             ),
-          )
-        ],
+            SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                    color: kPrimaryColor,
+                    borderRadius: BorderRadius.circular(20)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Add to Cart',
+                      style: TextStyle(color: kPrimaryLightColor, fontSize: 20),
+                    ),
+                    Icon(
+                      Icons.add_shopping_cart_outlined,
+                      color: kPrimaryLightColor,
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
+
+
 
 Icon starIcon(Color color) {
   return Icon(

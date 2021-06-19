@@ -35,7 +35,8 @@ class _FoodCategoryState extends State<FoodCategory> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.0,
+      height: 60.0,
+     // width: 150.0,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: _categories == null ? 0 : _categories.data.length,

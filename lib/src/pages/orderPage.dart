@@ -17,13 +17,13 @@ class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height,
+      height: MediaQuery.of(context).size.height*.8,
       child: ListView(
         /*padding: EdgeInsets.only(
           left: Dimentions.padding16,
           right: Dimentions.padding16,
         ),*/
-        scrollDirection: Axis.vertical,
+        //scrollDirection: Axis.vertical,
         children: [
           OrderCard(),
           OrderCard(),

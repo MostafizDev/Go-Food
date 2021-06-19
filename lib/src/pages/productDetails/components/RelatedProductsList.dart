@@ -16,17 +16,19 @@ class _RelatedProductsListState extends State<RelatedProductsList> {
   Widget build(BuildContext context) {
     return Container(
       height: 250.0,
-        width: 150.0,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: widget.relatedProducts.length,
-          itemBuilder: (context, index) {
-            return RelatedProductsCard(
-              relatedProductName: widget.relatedProducts[index].name,
-              relatedProductPrice: widget.relatedProducts[index].price.formattedWithCode,
-              relatedProductImage: widget.relatedProducts[index].media.source,
-            );
-          },
-        ));
+      width: 150.0,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: widget.relatedProducts.length,
+        itemBuilder: (context, index) {
+          return RelatedProductsCard(
+            relatedProductName: widget.relatedProducts[index].name,
+            relatedProductPrice:
+                widget.relatedProducts[index].price.formattedWithCode,
+            relatedProductImage: widget.relatedProducts[index].media.source,
+          );
+        },
+      ),
+    );
   }
 }

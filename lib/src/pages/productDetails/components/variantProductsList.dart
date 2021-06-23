@@ -16,14 +16,14 @@ class _VariantGroupsListState extends State<VariantGroupsList> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50.0,
-      color: Colors.greenAccent,
+      height: 40.0,
+      //color: Colors.greenAccent,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: widget.variantsProduct.length,
         itemBuilder: (context, index) {
           return VariantProductCard(
-            variantProductName: widget.variantsProduct[index].options[0].name,
+            variantProductName: widget.variantsProduct[index].name,
             variantProductPrice: widget.variantsProduct[index].options[0].price.formattedWithCode,
           );
         },

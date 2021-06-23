@@ -5,6 +5,7 @@ class Language extends Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': {
           "Category" : 'Category',
+          "Email/Username" : 'Your Email or Username',
         },
         'bn_BD': {
 

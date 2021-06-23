@@ -3,8 +3,7 @@ import 'dart:ui';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_food/src/Language.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
 import 'package:go_food/src/pages/productDetails/components/RelatedProductsList.dart';
@@ -32,6 +31,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  bool isFavourite = false;
   var priceTextStyle = TextStyle(
     fontSize: 20,
     fontWeight: FontWeight.bold,
@@ -69,7 +69,7 @@ class _DetailsPageState extends State<DetailsPage> {
               color: Colors.black,
             ),
             pinned: true,
-            expandedHeight: MediaQuery.of(context).size.height * .35,
+            expandedHeight: MediaQuery.of(context).size.height * .25,
             flexibleSpace: FlexibleSpaceBar(
               centerTitle: true,
               collapseMode: CollapseMode.parallax,
@@ -92,6 +92,7 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
           SliverFillRemaining(
             fillOverscroll: true,
+            hasScrollBody: true,
             //child: _buildContent(context),
             child: Padding(
               padding: EdgeInsets.only(
@@ -107,7 +108,7 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget bodyDescription(){
+  Widget bodyDescription() {
     return ListView(
       physics: NeverScrollableScrollPhysics(),
       children: [
@@ -115,9 +116,7 @@ class _DetailsPageState extends State<DetailsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              widget.productPrice == null
-                  ? '\$\$\$'
-                  : widget.productPrice,
+              widget.productPrice == null ? '\$\$\$' : widget.productPrice,
               style: priceTextStyle,
             ),
             Row(
@@ -147,10 +146,11 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
           ),
         ),
-        VariantGroupsList(
-          variantsProduct: widget.variantGroups,
-        ),
-
+        VariantGroupsList() == null
+            ? Text("No Data")
+            : VariantGroupsList(
+                variantsProduct: widget.variantGroups,
+              ),
 
         // Description
 
@@ -171,31 +171,30 @@ class _DetailsPageState extends State<DetailsPage> {
             ),
             expanded: Text(
               widget.productDescription
-                  .replaceAll('<p>', '')
-                  .replaceAll('</p>', '\n') ==
-                  null
+                          .replaceAll('<p>', '')
+                          .replaceAll('</p>', '\n') ==
+                      null
                   ? 'Food Description'
                   : widget.productDescription
-                  .replaceAll('<p>', '')
-                  .replaceAll('</p>', '\n'),
+                      .replaceAll('<p>', '')
+                      .replaceAll('</p>', '\n'),
               softWrap: true,
             ),
             collapsed: Text(
               widget.productDescription
-                  .replaceAll('<p>', '')
-                  .replaceAll('</p>', '\n') ==
-                  null
+                          .replaceAll('<p>', '')
+                          .replaceAll('</p>', '\n') ==
+                      null
                   ? 'Food Description'
                   : widget.productDescription
-                  .replaceAll('<p>', '')
-                  .replaceAll('</p>', '\n'),
+                      .replaceAll('<p>', '')
+                      .replaceAll('</p>', '\n'),
               softWrap: true,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
           ),
         ),
-
 
         //Related Product
 
@@ -215,79 +214,70 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
         ),
         RelatedProductsList(
-          relatedProducts: widget.relatedProducts,
-        ) ==
-            null
+                  relatedProducts: widget.relatedProducts,
+                ) ==
+                null
             ? Text("No Related Products")
             : RelatedProductsList(
-          relatedProducts: widget.relatedProducts,
-        ),
+                relatedProducts: widget.relatedProducts,
+              ),
       ],
     );
   }
 
   Widget addToCart() {
-    return Container(
-      margin: EdgeInsets.symmetric(
-        horizontal: Dimentions.padding16,
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: Dimentions.padding16,
-      ),
-      height: 70,
-      decoration: BoxDecoration(
-          color: kPrimaryLightColor,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          )),
-      child: Padding(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0),
-        child: Row(
-          children: [
-            Container(
-              height: 50,
-              width: 70,
+    return Padding(
+      padding: EdgeInsets.only(left: 16.0, right: 16.0),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              setState(() {
+                isFavourite = !isFavourite;
+              });
+            },
+            child: Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width*.20,
               decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(20)),
               child: Icon(
-                Icons.favorite_border,
-                color: kPrimaryLightColor,
+                isFavourite == false ?Icons.favorite_border: Icons.favorite,
+                color: kTextColorBlack,
               ),
             ),
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    color: kPrimaryColor,
-                    borderRadius: BorderRadius.circular(20)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      'Add to Cart',
-                      style: TextStyle(color: kPrimaryLightColor, fontSize: 20),
-                    ),
-                    Icon(
-                      Icons.add_shopping_cart_outlined,
-                      color: kPrimaryLightColor,
-                    ),
-                  ],
-                ),
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(
+            child: Container(
+              height: 40.0,
+              decoration: BoxDecoration(
+                color: kPrimaryColor,
+                borderRadius: BorderRadius.circular(20),
               ),
-            )
-          ],
-        ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    'Add to Cart',
+                    style: TextStyle(color: kTextColorBlack, fontSize: 20),
+                  ),
+                  Icon(
+                    Icons.add_shopping_cart_outlined,
+                    color: kTextColorBlack,
+                  ),
+                ],
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
 }
-
-
 
 Icon starIcon(Color color) {
   return Icon(

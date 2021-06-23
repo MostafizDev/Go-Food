@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/constants/size_config.dart';
 
 class CustomAppBar extends PreferredSize {
 

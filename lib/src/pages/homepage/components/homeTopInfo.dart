@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 
 class HomeTopInfo extends StatefulWidget {
   @override

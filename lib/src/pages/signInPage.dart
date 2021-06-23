@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/dimentions.dart';
@@ -8,15 +9,32 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+  final myEmailController = TextEditingController();
+  bool emailisValid = false;
   bool _toggleVisbility = true;
   var paddingBetweenWidget = SizedBox(
     height: Dimentions.padding16,
   );
 
   Widget _buildEmailTextFormField() {
+    emailisValid = EmailValidator.validate(myEmailController.text);
     return TextFormField(
+      key: _formKey,
+      controller: myEmailController,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        }
+        return null;
+      },
+      onChanged: (value) {
+        setState(() {
+          value == null ? emailisValid = false : emailisValid = true;
+        });
+      },
       decoration: InputDecoration(
-        hintText: "Your Email or UserName",
+        hintText: "Your Email or Username",
         hintStyle: TextStyle(
           color: Colors.grey,
         ),
@@ -27,26 +45,30 @@ class _SignInPageState extends State<SignInPage> {
   Widget _buildPasswordTextFormField() {
     return TextFormField(
       decoration: InputDecoration(
-          hintText: "Password",
-          hintStyle: TextStyle(
-            color: Colors.grey,
-          ),
-          suffixIcon: IconButton(
-            onPressed: () {
-              setState(() {
-                _toggleVisbility = !_toggleVisbility;
-              });
-            },
-            icon: _toggleVisbility
-                ? Icon(Icons.visibility)
-                : Icon(Icons.visibility_off),
-          )),
+        hintText: "Password",
+        hintStyle: TextStyle(
+          color: Colors.grey,
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              _toggleVisbility = !_toggleVisbility;
+            });
+          },
+          icon: _toggleVisbility
+              ? Icon(Icons.visibility)
+              : Icon(Icons.visibility_off),
+        ),
+      ),
       obscureText: _toggleVisbility,
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Email is valid? ' + (emailisValid ? 'yes' : 'no'));
+
+    emailisValid = EmailValidator.validate(myEmailController.text);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 30.0),
@@ -95,7 +117,13 @@ class _SignInPageState extends State<SignInPage> {
                   borderRadius: BorderRadius.circular(35.0)),
               child: FlatButton(
                 onPressed: () {
-                  Navigator.of(context).popAndPushNamed("/");
+                  emailisValid
+                      ? Navigator.of(context).popAndPushNamed("/")
+                      : ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please enter your mail'),
+                          ),
+                        );
                 },
                 child: Text(
                   "Sign In",

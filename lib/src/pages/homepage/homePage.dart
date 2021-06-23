@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/dimentions.dart';
+import 'package:go_food/src/constants/sizeConfig.dart';
 import 'package:go_food/src/pages/homepage/components/ProductList.dart';
 import 'package:go_food/src/widgets/boughtFood.dart';
 import 'package:go_food/src/pages/homepage/components/foodCategory.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.height*.8,
+      //height: SizeConfig(context, "height", .8),
       child: ListView(
         children: [
           HomeTopInfo(),

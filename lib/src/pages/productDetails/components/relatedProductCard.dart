@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
 import 'package:go_food/src/pages/productDetails/detailsPage.dart';
@@ -46,10 +46,10 @@ class _RelatedProductsCardState extends State<RelatedProductsCard> {
           /*Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailsScreen(
-                      productImage: widget.productImage,
-                      productName: widget.productName,
-                      productDescription: widget.productDescription,
+                builder: (context) => DetailsPage(
+                      productImage: widget.relatedProductImage,
+                      productName: widget.relatedProductName,
+                      productDescription: widget.r,
                       productPrice: widget.productPriceWithCode,
                       variantGroups: widget.variantGroups,
                       relatedProducts: widget.relatedProducts,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_food/src/configuration.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 class DrawerScreen extends StatefulWidget {
   @override
   _DrawerScreenState createState() => _DrawerScreenState();
@@ -10,7 +10,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.teal,
+      color: kSecondaryColor,
       padding: EdgeInsets.only(top:50,bottom: 70,left: 10),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -24,8 +24,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Md. Mostafizur Rahman',style: TextStyle(color: kPrimaryLightColor,fontWeight: FontWeight.bold),),
-                  Text('Flutter Developer',style: TextStyle(color: kPrimaryLightColor,fontWeight: FontWeight.bold))
+                  Text('Md. Mostafizur Rahman',style: TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold),),
+                  Text('Flutter Developer',style: TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold))
                 ],
               )
             ],
@@ -38,7 +38,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 children: [
                   Icon(element['icon'],color: Colors.black,size: 24,),
                   SizedBox(width: 10,),
-                  Text(element['title'],style: TextStyle(color: kPrimaryLightColor,fontWeight: FontWeight.bold,fontSize: 20))
+                  Text(element['title'],style: TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold,fontSize: 20))
                 ],
 
               ),
@@ -49,11 +49,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
             children: [
               Icon(Icons.settings,color: Colors.black,),
               SizedBox(width: 10,),
-              Text('Settings',style:TextStyle(color: kPrimaryLightColor,fontWeight: FontWeight.bold),),
+              Text('Settings',style:TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold),),
               SizedBox(width: 10,),
               Container(width: 2,height: 20,color: Colors.black,),
               SizedBox(width: 10,),
-              Text('Log out',style:TextStyle(color: kPrimaryLightColor,fontWeight: FontWeight.bold),)
+              Text('Log out',style:TextStyle(color: kPrimaryColor,fontWeight: FontWeight.bold),)
 
 
             ],

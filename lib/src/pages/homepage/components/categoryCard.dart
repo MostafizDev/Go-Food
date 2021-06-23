@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_food/src/Services/APIClient.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
 
 class CategoryCard extends StatefulWidget {
@@ -46,7 +46,7 @@ class _CategoryCardState extends State<CategoryCard> {
       elevation: 2.0,
       child: Container(
         decoration: BoxDecoration(
-          color: kPrimaryLightColor,
+          //color: kPrimaryLightColor,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(35),
             topRight: Radius.circular(35),

@@ -1,6 +1,6 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:go_food/src/constants/constants.dart';
+import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/pages/homepage/homePage.dart';
 import 'package:go_food/src/screens/drawerScreen.dart';
 import 'package:go_food/src/screens/mainScreen.dart';

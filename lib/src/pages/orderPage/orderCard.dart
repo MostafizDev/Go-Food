@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 
 class OrderCard extends StatefulWidget {
   final String productID;
+  final String productName;
+  final String productPrice;
+  final int quantity;
 
-  OrderCard({Key key, this.productID}) : super(key: key);
+  const OrderCard({
+    Key key,
+    this.productID,
+    this.productName,
+    this.productPrice,
+    this.quantity,
+  }) : super(key: key);
+
   @override
   _OrderCardState createState() => _OrderCardState();
 }
 
 class _OrderCardState extends State<OrderCard> {
-
-  /*_addToCart(){
-
-  };*/
 
   int cardItemCount;
   TextEditingController _controller = TextEditingController();
@@ -21,6 +27,8 @@ class _OrderCardState extends State<OrderCard> {
   void initState() {
     super.initState();
     _controller.text = "1"; // Setting the initial value for the field.
+
+    print("Carrrrttttttttttttttttt");
     //_addToCart();
   }
 
@@ -115,7 +123,7 @@ class _OrderCardState extends State<OrderCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                "Grilled Chicken",
+                widget.productName,
                 style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 5.0),

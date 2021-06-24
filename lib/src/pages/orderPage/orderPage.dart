@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
-import 'package:go_food/src/widgets/orderCard.dart';
+import 'package:go_food/src/models/retrieveCartItem.dart';
+import 'package:go_food/src/pages/orderPage/orderCard.dart';
 
 class OrderPage extends StatefulWidget {
   @override
@@ -10,29 +12,45 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  RetrieveCartItem cartProducts = new RetrieveCartItem();
+
   var paddingBetweenText = SizedBox(
     height: Dimentions.padding10,
   );
 
+  _callCartProduct() async {
+    try {
+      cartProducts = await APIManager().getCartProducts();
+      print(
+          "CART     Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee :::::::   ${cartProducts.lineItems[0].productName}");
+
+      setState(() {});
+    } catch (e) {
+      print("Errroooooooooorrr : $e");
+    }
+  }
+
+  @override
+  void initState() {
+    _callCartProduct();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    print("MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
     return Container(
-      height: MediaQuery.of(context).size.height*.8,
-      child: ListView(
-        /*padding: EdgeInsets.only(
-          left: Dimentions.padding16,
-          right: Dimentions.padding16,
-        ),*/
-        //scrollDirection: Axis.vertical,
-        children: [
-          OrderCard(),
-          OrderCard(),
-          OrderCard(),
-          OrderCard(),
-          OrderCard(),
-          OrderCard(),
-          _totalContainer(),
-        ],
+      height: 500.0,
+      //height: MediaQuery.of(context).size.height * .8,
+      child: ListView.builder(
+        shrinkWrap: true,
+        //scrollDirection: Axis.horizontal,
+        itemCount: cartProducts.lineItems.length,
+        itemBuilder: (context, index) {
+          return OrderCard(
+            productName: cartProducts.lineItems[index].name,
+          );
+        },
       ),
       //bottomNavigationBar: _totalContainer(),
     );

@@ -47,6 +47,7 @@ class ProductListState extends State<ProductList> {
         itemBuilder: (BuildContext context, int index) {
 
           return ProductListCard(
+            productID: productModel.data[index].id,
             productName: productModel.data[index].name,
             productPriceWithSymbol: productModel.data[index].price.formattedWithSymbol,
             productPriceWithCode: productModel.data[index].price.formattedWithCode,

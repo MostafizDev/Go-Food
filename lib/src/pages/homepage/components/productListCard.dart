@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
+import 'package:go_food/src/models/addToCart.dart';
 import 'package:go_food/src/pages/productDetails/detailsPage.dart';
-import 'package:go_food/src/widgets/orderCard.dart';
+import 'package:go_food/src/pages/orderPage/orderCard.dart';
 
 import '../../../widgets/customText.dart';
 import 'package:get/get.dart';
 
 class ProductListCard extends StatefulWidget {
+  final String productID;
   final String productName;
   final String productImage;
   final String productPriceWithSymbol;
@@ -20,6 +23,7 @@ class ProductListCard extends StatefulWidget {
 
   const ProductListCard({
     Key key,
+    this.productID,
     this.productName,
     this.productImage,
     this.productPriceWithSymbol,
@@ -36,10 +40,23 @@ class ProductListCard extends StatefulWidget {
 }
 
 class _ProductListCardState extends State<ProductListCard> {
+  AddToCart addToCart;
   final cardNameTextStyle =
       TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black);
   final cardPriceTextStyle = TextStyle(fontSize: 10, color: Colors.orange);
   final cardDescriptionTextStyle = TextStyle(fontSize: 14, color: Colors.grey);
+
+  _addToCart() async {
+    try {
+      addToCart = await APIManager().addToCart(widget.productID, 1.toString());
+      print("IIIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ::::: ${widget.productID}");
+    //print("Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee :::::::   ${_productModel.data[0].name}");
+
+    setState(() {});
+    } catch (e) {
+    print("Errroooooooooorrr : $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +150,12 @@ class _ProductListCardState extends State<ProductListCard> {
               IconButton(
                   icon: Icon(Icons.add_shopping_cart),
                   onPressed: () {
-                    //cartController.addProductToCart(product);
+                    _addToCart();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Added to Cart'),
+                      ),
+                    );
                   })
             ],
           ),

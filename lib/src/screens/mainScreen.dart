@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/pages/homepage/homePage.dart';
-import 'package:go_food/src/pages/orderPage.dart';
+import 'package:go_food/src/pages/orderPage/orderPage.dart';
 import 'package:go_food/src/pages/profile/profilePage.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 

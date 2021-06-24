@@ -38,21 +38,39 @@ class _OrderPageState extends State<OrderPage> {
 
   @override
   Widget build(BuildContext context) {
-    print("MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    return Container(
-      height: 500.0,
-      //height: MediaQuery.of(context).size.height * .8,
-      child: ListView.builder(
-        shrinkWrap: true,
-        //scrollDirection: Axis.horizontal,
-        itemCount: cartProducts.lineItems.length,
-        itemBuilder: (context, index) {
-          return OrderCard(
-            productName: cartProducts.lineItems[index].name,
-          );
-        },
-      ),
-      //bottomNavigationBar: _totalContainer(),
+    return Column(
+      children: [
+        Container(
+          height: MediaQuery.of(context).size.height * .55,
+          //height: MediaQuery.of(context).size.height * .8,
+          child: cartProducts.totalItems == null
+              ? Container(
+            height: 25.0,
+                  child: Text("No Items"),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  //scrollDirection: Axis.horizontal,
+                  itemCount: cartProducts.lineItems.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        OrderCard(
+                          productName: cartProducts.lineItems[index].name,
+                          quantity: cartProducts.lineItems[index].quantity,
+                          productPrice: cartProducts.lineItems[index].price.raw
+                              .toString(),
+                          productImage:
+                              cartProducts.lineItems[index].media.source,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+          //bottomNavigationBar: _totalContainer(),
+        ),
+        _totalContainer()
+      ],
     );
   }
 
@@ -63,7 +81,7 @@ class _OrderPageState extends State<OrderPage> {
         right: Dimentions.padding16,
         top: Dimentions.padding10,
       ),
-      height: 220.0,
+      height: MediaQuery.of(context).size.height * .3,
       child: Column(
         children: [
           Row(
@@ -78,7 +96,9 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                "220.0 ৳",
+                cartProducts.subtotal.formatted.toString() +
+                    ' ' +
+                    cartProducts.currency.symbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -100,7 +120,7 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                "0.0 ৳",
+                "0.0" + ' ' + cartProducts.currency.symbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -109,31 +129,9 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ],
           ),
-          paddingBetweenText,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Tax : ",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.grey,
-                ),
-              ),
-              Text(
-                "10.0 ৳",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
-          paddingBetweenText,
+          //paddingBetweenText,
           Divider(),
-          paddingBetweenText,
+          //paddingBetweenText,
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -146,7 +144,9 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                "230.0 ৳",
+                cartProducts.subtotal.formatted.toString() +
+                    ' ' +
+                    cartProducts.currency.symbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -175,7 +175,6 @@ class _OrderPageState extends State<OrderPage> {
               ),
             ),
           ),
-          paddingBetweenText,
         ],
       ),
     );

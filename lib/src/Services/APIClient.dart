@@ -42,8 +42,8 @@ class APIManager {
       'X-Authorization': 'pk_267624ff9adb23a3e0d054aa7ac4d5efde482e3e13016'
     };
     var body = {
-      id: id,
-      quantity: quantity,
+      "id": "$id",
+      //"quantity": "$quantity",
     };
     var client = http.Client();
 
@@ -53,6 +53,7 @@ class APIManager {
 
       print(response.body);
       print(response.statusCode);
+      print('Cart Product Id ::: $id');
 
       if (response.statusCode == 200) {
         _response = response;

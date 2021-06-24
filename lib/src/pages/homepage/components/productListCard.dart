@@ -46,7 +46,7 @@ class _ProductListCardState extends State<ProductListCard> {
   final cardPriceTextStyle = TextStyle(fontSize: 10, color: Colors.orange);
   final cardDescriptionTextStyle = TextStyle(fontSize: 14, color: Colors.grey);
 
-  _addToCart() async {
+  Future _addToCart( ) async {
     try {
       addToCart = await APIManager().addToCart(widget.productID, 1.toString());
       print("IIIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ::::: ${widget.productID}");
@@ -57,6 +57,7 @@ class _ProductListCardState extends State<ProductListCard> {
     print("Errroooooooooorrr : $e");
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

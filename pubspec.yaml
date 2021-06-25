@@ -31,6 +31,8 @@ dependencies:
   expandable: ^5.0.1
   curved_navigation_bar: ^0.3.7
   email_validator: ^2.0.1
+  pull_to_refresh: ^2.0.0
+  liquid_pull_to_refresh: ^3.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

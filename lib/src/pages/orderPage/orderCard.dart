@@ -1,13 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/dimentions.dart';
-import 'package:go_food/src/constants/themes.dart';
+import 'package:go_food/src/models/deleteCartItem.dart';
+import 'package:go_food/src/models/updateCartItem.dart';
+import 'package:go_food/src/pages/orderPage/orderPage.dart';
 
+// ignore: must_be_immutable
 class OrderCard extends StatefulWidget {
   String productID;
   String productName;
-  String productPrice;
   String productImage;
-  String cartTotal;
+  String productPrice;
+  String productTotalPrice;
+  String lineItemId;
+  String deleteItemId;
+  String cartTotalPrice;
   String currencyType;
   int quantity;
 
@@ -16,7 +24,10 @@ class OrderCard extends StatefulWidget {
     this.productPrice,
     this.quantity,
     this.productName,
-    this.cartTotal,
+    this.productTotalPrice,
+    this.lineItemId,
+    this.deleteItemId,
+    this.cartTotalPrice,
     this.currencyType,
     this.productImage,
   });
@@ -26,16 +37,40 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
+  UpdateCartItem updateCartItem = new UpdateCartItem();
+  DeleteCartItem deleteCartItem = new DeleteCartItem();
   TextEditingController _controller = TextEditingController();
   var paddingBetweenText = SizedBox(
     height: Dimentions.padding10,
   );
 
+  _updateCartItem(var itemId, var quantity) async {
+    try {
+      updateCartItem = await APIManager().updateCartItem(itemId, quantity);
+      //print("CART Item Id :::::::   ${updateCartItem.productId}");
+
+      setState(() {});
+    } catch (e) {
+      print("Errroooooooooorrr : $e");
+    }
+  }
+
+  _deleteCartItem(var itemId) async {
+    try {
+      deleteCartItem = await APIManager().deleteCartItem(itemId);
+      print("Deleted Cart Product Id ::: ${deleteCartItem.lineItemId}");
+
+      setState(() {});
+    } catch (e) {
+      print("Deleted Cart Error : $e");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    _controller.text =
-        widget.quantity.toString(); // Setting the initial value for the field.
+    _controller.text = widget.quantity
+        .toString(); // Setting the initial value for Product item.
   }
 
   @override
@@ -62,11 +97,11 @@ class _OrderCardState extends State<OrderCard> {
                               currentValue++;
                               _controller.text = (currentValue)
                                   .toString(); // incrementing value
-                              print(
-                                  "Controoooooooooooooollller  ::::::: ${_controller.text}");
-                              //cardItemCount = _controller.text;
-
-                              //widget.itemCount(int.parse(_controller.value.text));
+                              print("Controller  ::::::: ${_controller.text}");
+                              _updateCartItem(
+                                  widget.lineItemId, _controller.text);
+                              widget.productTotalPrice =
+                                  updateCartItem.lineTotal.raw.toString();
                             });
                           },
                           child: Icon(Icons.keyboard_arrow_up,
@@ -79,10 +114,6 @@ class _OrderCardState extends State<OrderCard> {
                           ),
                           controller: _controller,
                           style: TextStyle(fontSize: 18.0, color: Colors.grey),
-                          keyboardType: TextInputType.numberWithOptions(
-                            decimal: false,
-                            signed: true,
-                          ),
                         ),
                       ),
                       InkWell(
@@ -95,8 +126,11 @@ class _OrderCardState extends State<OrderCard> {
                               _controller.text =
                                   (currentValue > 0 ? currentValue : 0)
                                       .toString(); // decrementing value
-                              print(
-                                  "Controoooooooooooooollller  ::::::: ${_controller.text}");
+                              print("Controller  ::::::: ${_controller.text}");
+                              _updateCartItem(
+                                  widget.lineItemId, (_controller.text));
+                              widget.productTotalPrice =
+                                  updateCartItem.lineTotal.raw.toString();
                             });
                           },
                           child: Icon(Icons.keyboard_arrow_down,
@@ -139,7 +173,7 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                   SizedBox(height: 5.0),
                   Text(
-                    widget.productPrice,
+                    widget.productTotalPrice,
                     style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.orangeAccent,
@@ -183,7 +217,13 @@ class _OrderCardState extends State<OrderCard> {
               ),
               Spacer(),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    //_deleteCartItem(widget.lineItemId);
+                    _updateCartItem(widget.lineItemId, 0);
+                    print('Delete Icon Tapped :ID: ${widget.lineItemId}');
+                  });
+                },
                 child: Icon(
                   Icons.cancel,
                   color: Colors.red,

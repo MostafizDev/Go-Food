@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
+import 'package:go_food/src/models/deleteCartItem.dart';
 import 'package:go_food/src/models/retrieveCartItem.dart';
 import 'package:go_food/src/models/updateCartItem.dart';
 import 'package:go_food/src/pages/orderPage/orderCard.dart';
@@ -18,17 +19,17 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<LiquidPullToRefreshState> _refreshIndicatorKey =
-  GlobalKey<LiquidPullToRefreshState>();
+      GlobalKey<LiquidPullToRefreshState>();
 
   static int refreshNum = 10; // number that changes when refreshed
   Stream<int> counterStream =
-  Stream<int>.periodic(Duration(seconds: 3), (x) => refreshNum);
+      Stream<int>.periodic(Duration(seconds: 3), (x) => refreshNum);
 
   RetrieveCartItem cartProducts = new RetrieveCartItem();
   UpdateCartItem updateCartItem = new UpdateCartItem();
+  DeleteCartItem deleteCartItem = new DeleteCartItem();
 
   var paddingBetweenText = SizedBox(
     height: Dimentions.padding10,
@@ -44,16 +45,33 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
-  /*_updateCartItem(var itemId, var quantity) async {
+  _updateCartItem(var itemId, var quantity) async {
     try {
       updateCartItem = await APIManager().updateCartItem(itemId, quantity);
       print("CART Item Id :::::::   ${updateCartItem.productId}");
-
-      setState(() {});
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Updating Your Cart'),
+        ),
+      );
     } catch (e) {
       print("Errroooooooooorrr : $e");
     }
-  }*/
+  }
+
+  _deleteCartItem(var itemId, var quantity) async {
+    try {
+      updateCartItem = await APIManager().updateCartItem(itemId, quantity);
+      print("CART Item Id :::::::   ${updateCartItem.productId}");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Deleting ${updateCartItem.productName}'),
+        ),
+      );
+    } catch (e) {
+      print("Errroooooooooorrr : $e");
+    }
+  }
 
   @override
   void initState() {
@@ -88,49 +106,63 @@ class _OrderPageState extends State<OrderPage> {
       onRefresh: _handleRefresh,
       showChildOpacityTransition: false,
       child: StreamBuilder<int>(
-        stream: null,
-        builder: (context, snapshot) {
-          return Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * .55,
-                //height: MediaQuery.of(context).size.height * .8,
-                child: cartProducts.totalItems == null
+          stream: null,
+          builder: (context, snapshot) {
+            return Column(
+              children: [
+                cartProducts.lineItems == null
                     ? Container(
-                        height: 25.0,
+                        height: MediaQuery.of(context).size.height * .55,
+                        //height: 25.0,
                         child: Text("No Items"),
                       )
-                    : ListView.builder(
-                      shrinkWrap: true,
-                      //scrollDirection: Axis.horizontal,
-                      itemCount: cartProducts.lineItems.length,
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            OrderCard(
-                              productName: cartProducts.lineItems[index].name,
-                              quantity: cartProducts.lineItems[index].quantity,
-                              productPrice: cartProducts
-                                  .lineItems[index].price.raw
-                                  .toString(),
-                              productImage:
-                                  cartProducts.lineItems[index].media.source,
-                              productTotalPrice: cartProducts
-                                  .lineItems[index].lineTotal.raw
-                                  .toString(),
-                              lineItemId: cartProducts.lineItems[index].id,
-                            ),
-                          ],
-                        );
-                      },
-                    ),
-                //bottomNavigationBar: _totalContainer(),
-              ),
-              _totalContainer()
-            ],
-          );
-        }
-      ),
+                    : Container(
+                        height: MediaQuery.of(context).size.height * .55,
+                        //height: MediaQuery.of(context).size.height * .8,
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          //scrollDirection: Axis.horizontal,
+                          itemCount: cartProducts.lineItems.length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                OrderCard(
+                                  deletePtoduct: () async {
+                                    await _deleteCartItem(
+                                        cartProducts.lineItems[index].id, 0);
+                                    _callCartProduct();
+                                  },
+                                  itemCount: (value) async {
+                                    await _updateCartItem(
+                                        cartProducts.lineItems[index].id,
+                                        value);
+                                    _callCartProduct();
+                                    print('Product Recalled');
+                                  },
+                                  productName:
+                                      cartProducts.lineItems[index].name,
+                                  quantity:
+                                      cartProducts.lineItems[index].quantity,
+                                  productPrice: cartProducts
+                                      .lineItems[index].price.raw
+                                      .toString(),
+                                  productImage: cartProducts
+                                      .lineItems[index].media.source,
+                                  productTotalPrice: cartProducts
+                                      .lineItems[index].lineTotal.raw
+                                      .toString(),
+                                  lineItemId: cartProducts.lineItems[index].id,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        //bottomNavigationBar: _totalContainer(),
+                      ),
+                _totalContainer()
+              ],
+            );
+          }),
     );
   }
 
@@ -157,9 +189,14 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                cartProducts.subtotal.formatted.toString() +
-                    ' ' +
-                    cartProducts.currency.symbol,
+                cartProducts.subtotal == null
+                    ? '0.00'
+                    : cartProducts.subtotal.formatted.toString() +
+                                ' ' +
+                                cartProducts.currency.symbol ==
+                            null
+                        ? ''
+                        : cartProducts.currency.symbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -181,7 +218,7 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                "0.0" + ' ' + cartProducts.currency.symbol,
+                '0.00 Tk',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -205,9 +242,14 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                cartProducts.subtotal.formatted.toString() +
-                    ' ' +
-                    cartProducts.currency.symbol,
+                cartProducts.subtotal == null
+                    ? '0.00'
+                    : cartProducts.subtotal.formatted.toString() +
+                                ' ' +
+                                cartProducts.currency.symbol ==
+                            null
+                        ? ''
+                        : cartProducts.currency.symbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,

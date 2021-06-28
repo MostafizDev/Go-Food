@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/deleteCartItem.dart';
+import 'package:go_food/src/models/retrieveCartItem.dart';
 import 'package:go_food/src/models/updateCartItem.dart';
 import 'package:go_food/src/pages/orderPage/orderPage.dart';
 
 // ignore: must_be_immutable
+typedef ItemCount = Function(String);
+
 class OrderCard extends StatefulWidget {
   String productID;
   String productName;
@@ -18,6 +21,8 @@ class OrderCard extends StatefulWidget {
   String cartTotalPrice;
   String currencyType;
   int quantity;
+  ItemCount itemCount;
+  VoidCallback deletePtoduct;
 
   OrderCard({
     this.productID,
@@ -30,6 +35,8 @@ class OrderCard extends StatefulWidget {
     this.cartTotalPrice,
     this.currencyType,
     this.productImage,
+    this.itemCount,
+    this.deletePtoduct,
   });
 
   @override
@@ -37,12 +44,23 @@ class OrderCard extends StatefulWidget {
 }
 
 class _OrderCardState extends State<OrderCard> {
+  RetrieveCartItem cartProducts = new RetrieveCartItem();
   UpdateCartItem updateCartItem = new UpdateCartItem();
   DeleteCartItem deleteCartItem = new DeleteCartItem();
   TextEditingController _controller = TextEditingController();
   var paddingBetweenText = SizedBox(
     height: Dimentions.padding10,
   );
+
+  _callCartProduct() async {
+    try {
+      cartProducts = await APIManager().getCartProducts();
+
+      setState(() {});
+    } catch (e) {
+      print("Errroooooooooorrr : $e");
+    }
+  }
 
   _updateCartItem(var itemId, var quantity) async {
     try {
@@ -97,11 +115,12 @@ class _OrderCardState extends State<OrderCard> {
                               currentValue++;
                               _controller.text = (currentValue)
                                   .toString(); // incrementing value
+
+                              widget.itemCount(_controller.text);
                               print("Controller  ::::::: ${_controller.text}");
-                              _updateCartItem(
-                                  widget.lineItemId, _controller.text);
-                              widget.productTotalPrice =
-                                  updateCartItem.lineTotal.raw.toString();
+
+                              /*widget.productTotalPrice =
+                                  updateCartItem.lineTotal.raw.toString();*/
                             });
                           },
                           child: Icon(Icons.keyboard_arrow_up,
@@ -121,16 +140,14 @@ class _OrderCardState extends State<OrderCard> {
                             int currentValue = int.parse(_controller.text);
                             setState(() {
                               print("Setting state");
-
                               currentValue--;
                               _controller.text =
                                   (currentValue > 0 ? currentValue : 0)
                                       .toString(); // decrementing value
+                              widget.itemCount(_controller.text);
                               print("Controller  ::::::: ${_controller.text}");
-                              _updateCartItem(
-                                  widget.lineItemId, (_controller.text));
-                              widget.productTotalPrice =
-                                  updateCartItem.lineTotal.raw.toString();
+                              /*widget.productTotalPrice =
+                                  updateCartItem.lineTotal.raw.toString();*/
                             });
                           },
                           child: Icon(Icons.keyboard_arrow_down,
@@ -173,7 +190,7 @@ class _OrderCardState extends State<OrderCard> {
                   ),
                   SizedBox(height: 5.0),
                   Text(
-                    widget.productTotalPrice,
+                    widget.productPrice,
                     style: TextStyle(
                         fontSize: 16.0,
                         color: Colors.orangeAccent,
@@ -217,13 +234,7 @@ class _OrderCardState extends State<OrderCard> {
               ),
               Spacer(),
               GestureDetector(
-                onTap: () {
-                  setState(() {
-                    //_deleteCartItem(widget.lineItemId);
-                    _updateCartItem(widget.lineItemId, 0);
-                    print('Delete Icon Tapped :ID: ${widget.lineItemId}');
-                  });
-                },
+                onTap: widget.deletePtoduct,
                 child: Icon(
                   Icons.cancel,
                   color: Colors.red,

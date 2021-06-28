@@ -23,6 +23,7 @@ class _VariantGroupsListState extends State<VariantGroupsList> {
         itemCount: widget.variantsProduct.length,
         itemBuilder: (context, index) {
           return VariantProductCard(
+            variantProductId: widget.variantsProduct[index].id,
             variantProductName: widget.variantsProduct[index].name,
             variantProductPrice: widget.variantsProduct[index].options[0].price.formattedWithCode,
           );

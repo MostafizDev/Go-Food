@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_food/src/constants/themes.dart';
 
 class VariantProductCard extends StatefulWidget {
+  final String variantProductId;
   final String variantProductName;
   final String variantProductPrice;
   final String variantProductImage;
 
   const VariantProductCard({
     Key key,
+    this.variantProductId,
     this.variantProductName,
     this.variantProductPrice,
     this.variantProductImage,
@@ -19,6 +21,7 @@ class VariantProductCard extends StatefulWidget {
 
 class _VariantProductCardState extends State<VariantProductCard> {
   bool cardSelected = false;
+  var selectedIndex;
 
   @override
   Widget build(BuildContext context) {

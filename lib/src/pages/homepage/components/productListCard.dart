@@ -49,7 +49,7 @@ class _ProductListCardState extends State<ProductListCard> {
   Future _addToCart( ) async {
     try {
       addToCart = await APIManager().addToCart(widget.productID, 1.toString());
-      print("IIIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ::::: ${widget.productID}");
+      //print("IIIIIIIIIIIIIIIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD ::::: ${widget.productID}");
     //print("Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee :::::::   ${_productModel.data[0].name}");
 
     setState(() {});

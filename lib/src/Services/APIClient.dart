@@ -165,6 +165,7 @@ class APIManager {
       print('Deleted Cart Product Id From API ::: $itemId');
 
       if (response.statusCode == 200) {
+        print('Deleted Cart Product Id From API ::: $itemId');
         return DeleteCartItem.fromJson(jsonDecode(response.body));
       }
     } on Exception catch (e) {

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
@@ -11,6 +12,8 @@ import 'package:go_food/src/models/retrieveCartItem.dart';
 import 'package:go_food/src/models/updateCartItem.dart';
 import 'package:go_food/src/pages/orderPage/orderCard.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:loading/indicator/ball_pulse_indicator.dart';
+import 'package:loading/loading.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class OrderPage extends StatefulWidget {
@@ -65,7 +68,11 @@ class _OrderPageState extends State<OrderPage> {
       print("CART Item Id :::::::   ${updateCartItem.productId}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Deleting ${updateCartItem.productName}'),
+          backgroundColor: Colors.transparent,
+          content: Loading(
+              color: kPrimaryColor,
+              indicator: BallPulseIndicator(),
+              size: 75.0),
         ),
       );
     } catch (e) {
@@ -112,53 +119,74 @@ class _OrderPageState extends State<OrderPage> {
               children: [
                 cartProducts.lineItems == null
                     ? Container(
+                        color: kPrimaryLightColor,
                         height: MediaQuery.of(context).size.height * .55,
-                        //height: 25.0,
-                        child: Text("No Items"),
-                      )
-                    : Container(
-                        height: MediaQuery.of(context).size.height * .55,
-                        //height: MediaQuery.of(context).size.height * .8,
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          //scrollDirection: Axis.horizontal,
-                          itemCount: cartProducts.lineItems.length,
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                OrderCard(
-                                  deletePtoduct: () async {
-                                    await _deleteCartItem(
-                                        cartProducts.lineItems[index].id, 0);
-                                    _callCartProduct();
-                                  },
-                                  itemCount: (value) async {
-                                    await _updateCartItem(
-                                        cartProducts.lineItems[index].id,
-                                        value);
-                                    _callCartProduct();
-                                    print('Product Recalled');
-                                  },
-                                  productName:
-                                      cartProducts.lineItems[index].name,
-                                  quantity:
-                                      cartProducts.lineItems[index].quantity,
-                                  productPrice: cartProducts
-                                      .lineItems[index].price.raw
-                                      .toString(),
-                                  productImage: cartProducts
-                                      .lineItems[index].media.source,
-                                  productTotalPrice: cartProducts
-                                      .lineItems[index].lineTotal.raw
-                                      .toString(),
-                                  lineItemId: cartProducts.lineItems[index].id,
-                                ),
-                              ],
-                            );
-                          },
+                        child: Center(
+                          child: Loading(
+                              color: kPrimaryColor,
+                              indicator: BallPulseIndicator(),
+                              size: 75.0),
                         ),
-                        //bottomNavigationBar: _totalContainer(),
-                      ),
+                      )
+                    : cartProducts.totalItems == 0
+                        ? Container(
+                            height: MediaQuery.of(context).size.height * .55,
+                            //height: 25.0,
+                            child: Center(
+                                child: Container(
+                              height: 100.0,
+                              width: 100.0,
+                              child: Image.asset(
+                                "assets/images/empty-cart.png",
+                                color: kPrimaryColor,
+                              ),
+                            )),
+                          )
+                        : Container(
+                            height: MediaQuery.of(context).size.height * .55,
+                            //height: MediaQuery.of(context).size.height * .8,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              //scrollDirection: Axis.horizontal,
+                              itemCount: cartProducts.lineItems.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    OrderCard(
+                                      deletePtoduct: () async {
+                                        await _deleteCartItem(
+                                            cartProducts.lineItems[index].id,
+                                            0);
+                                        _callCartProduct();
+                                      },
+                                      itemCount: (value) async {
+                                        await _updateCartItem(
+                                            cartProducts.lineItems[index].id,
+                                            value);
+                                        _callCartProduct();
+                                        print('Product Recalled');
+                                      },
+                                      productName:
+                                          cartProducts.lineItems[index].name,
+                                      quantity: cartProducts
+                                          .lineItems[index].quantity,
+                                      productPrice: cartProducts
+                                          .lineItems[index].price.raw
+                                          .toString(),
+                                      productImage: cartProducts
+                                          .lineItems[index].media.source,
+                                      productTotalPrice: cartProducts
+                                          .lineItems[index].lineTotal.raw
+                                          .toString(),
+                                      lineItemId:
+                                          cartProducts.lineItems[index].id,
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                            //bottomNavigationBar: _totalContainer(),
+                          ),
                 _totalContainer()
               ],
             );
@@ -168,13 +196,24 @@ class _OrderPageState extends State<OrderPage> {
 
   Widget _totalContainer() {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
       padding: EdgeInsets.only(
         left: Dimentions.padding16,
         right: Dimentions.padding16,
         top: Dimentions.padding10,
       ),
-      height: MediaQuery.of(context).size.height * .3,
+      height: MediaQuery.of(context).size.height * .25,
       child: Column(
         children: [
           Row(
@@ -190,13 +229,8 @@ class _OrderPageState extends State<OrderPage> {
               ),
               Text(
                 cartProducts.subtotal == null
-                    ? '0.00'
-                    : cartProducts.subtotal.formatted.toString() +
-                                ' ' +
-                                cartProducts.currency.symbol ==
-                            null
-                        ? ''
-                        : cartProducts.currency.symbol,
+                    ? '...'
+                    : cartProducts.subtotal.formattedWithSymbol,
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -218,7 +252,7 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               ),
               Text(
-                '0.00 Tk',
+                'Tk0.00',
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -243,13 +277,8 @@ class _OrderPageState extends State<OrderPage> {
               ),
               Text(
                 cartProducts.subtotal == null
-                    ? '0.00'
-                    : cartProducts.subtotal.formatted.toString() +
-                                ' ' +
-                                cartProducts.currency.symbol ==
-                            null
-                        ? ''
-                        : cartProducts.currency.symbol,
+                    ? '...'
+                    : cartProducts.subtotal.formattedWithSymbol.toString(),
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,

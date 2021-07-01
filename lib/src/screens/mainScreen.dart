@@ -22,6 +22,7 @@ class _MainScreenState extends State<MainScreen> {
   double xOffset = 0;
   double yOffset = 0;
   double scaleFactor = 1;
+  var changeTab;
 
   bool isDrawerOpen = false;
 
@@ -101,14 +102,22 @@ class _MainScreenState extends State<MainScreen> {
                           : null,
               InkWell(
                 onTap: () {
-                  MainScreen(currentTabIndex: 1,);
-                  print('Tappppppppedd On Cart  : $currentPage');
+                  setState(() {
+                    // ignore: unnecessary_statements
+                    changeTab = 1;
+                    print('Tapped On Cart Inside : $changeTab');
+                  });
+                  MainScreen(currentTabIndex: changeTab,);
+                  print('Tapped On Cart  : $changeTab');
                 },
                 child: Padding(
                   padding: EdgeInsets.only(right: Dimentions.padding16),
                   child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.shopping_cart_outlined),
+                    backgroundColor: kPrimaryColor,
+                    child: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

@@ -46,14 +46,15 @@ class _RelatedProductsCardState extends State<RelatedProductsCard> {
           /*Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailsPage(
-                      productImage: widget.relatedProductImage,
-                      productName: widget.relatedProductName,
-                      productDescription: widget.r,
-                      productPrice: widget.productPriceWithCode,
-                      variantGroups: widget.variantGroups,
-                      relatedProducts: widget.relatedProducts,
-                    )),
+              builder: (context) => DetailsPage(
+                productImage: widget.productImage,
+                productName: widget.productName,
+                productDescription: widget.productDescription,
+                productPrice: widget.productPriceWithCode,
+                variantGroups: widget.variantGroups,
+                relatedProducts: widget.relatedProducts,
+              ),
+            ),
           );*/
         },
         child: Card(

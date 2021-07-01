@@ -78,6 +78,7 @@ class _ProductListCardState extends State<ProductListCard> {
             context,
             MaterialPageRoute(
               builder: (context) => DetailsPage(
+                productId: widget.productID,
                 productImage: widget.productImage,
                 productName: widget.productName,
                 productDescription: widget.productDescription,

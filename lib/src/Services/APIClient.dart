@@ -53,7 +53,7 @@ class APIManager {
       var response = await client.post(Uri.parse(Url.addToCartAPIURL),
           headers: requestHeaders, body: body);
 
-     /* print(response.body);
+      /*print(response.body);
       print(response.statusCode);
       print('Cart Product Id ::: $id');*/
 
@@ -62,7 +62,7 @@ class APIManager {
       }
     } on Exception catch (e) {
       // TODO
-      print("Errrrroooooooorrrrr: $e");
+      print("Error for Add to Cart: $e");
 
       _response = null;
     }
@@ -82,15 +82,15 @@ class APIManager {
     var response = await client.get(Uri.parse(Url.productsAPIURL),
         headers: requestHeaders);
 
-   /* print("Rsponse :::: ${response.statusCode}");
+    /* print("Rsponse :::: ${response.statusCode}");
     print("Rsponse :::: ${response.body}");*/
     if (response.statusCode == 200) {
       var jsonString = response.body;
       var jsonMap = jsonDecode(jsonString);
-      print('sdfasdafds ${jsonMap['meta']}');
+      /*print('sdfasdafds ${jsonMap['meta']}');*/
 
       productmodel = ProductModel.fromJson(jsonMap);
-      print("::::::::::::::::::::::::::::::::::::: $productmodel");
+      /*print("::::::::::::::::::::::::::::::::::::: $productmodel");*/
     }
     return productmodel;
   }
@@ -131,8 +131,10 @@ class APIManager {
     var client = http.Client();
 
     try {
-      var response = await client.put(Uri.parse(Url.updateCartItemAPIURL+itemId),
-          headers: requestHeaders, body: body);
+      var response = await client.put(
+          Uri.parse(Url.updateCartItemAPIURL + itemId),
+          headers: requestHeaders,
+          body: body);
 
       /*print(response.body);
       print(response.statusCode);
@@ -143,10 +145,9 @@ class APIManager {
       }
     } on Exception catch (e) {
       // TODO
-      print("Errrrroooooooorrrrr: $e");
+      /*print("Update Cart Error From APIClient: $e");*/
 
     }
-
   }
 
   Future<DeleteCartItem> deleteCartItem(var itemId) async {
@@ -157,7 +158,8 @@ class APIManager {
     var client = http.Client();
 
     try {
-      var response = await client.put(Uri.parse(Url.deleteCartItemAPIURL+itemId),
+      var response = await client.put(
+          Uri.parse(Url.deleteCartItemAPIURL + itemId),
           headers: requestHeaders);
 
       print('Response :: ${response.body}');
@@ -171,8 +173,6 @@ class APIManager {
     } on Exception catch (e) {
       // TODO
       print("Delete Error: $e");
-
     }
-
   }
 }

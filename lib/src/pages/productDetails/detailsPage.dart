@@ -3,13 +3,16 @@ import 'dart:ui';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/themes.dart';
 import 'package:go_food/src/constants/dimentions.dart';
 import 'package:go_food/src/models/ProductsModel.dart';
+import 'package:go_food/src/models/addToCart.dart';
 import 'package:go_food/src/pages/productDetails/components/RelatedProductsList.dart';
 import 'package:go_food/src/pages/productDetails/components/variantProductsList.dart';
 
 class DetailsPage extends StatefulWidget {
+  String productId;
   String productImage;
   String productName;
   String productDescription;
@@ -18,6 +21,7 @@ class DetailsPage extends StatefulWidget {
   List<VariantGroups> variantGroups;
 
   DetailsPage({
+    this.productId,
     this.productImage,
     this.productName,
     this.productDescription,
@@ -31,6 +35,7 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  AddToCart addToCart;
   bool isFavourite = false;
   var priceTextStyle = TextStyle(
     fontSize: 20,
@@ -41,6 +46,18 @@ class _DetailsPageState extends State<DetailsPage> {
     fontWeight: FontWeight.bold,
   );
   TextEditingController _controller = TextEditingController();
+
+  Future _addToCartFromDetails() async {
+    try {
+      addToCart = await APIManager().addToCart(widget.productId, 1.toString());
+      print("Id Form Details Page:: ${widget.productId}");
+      //print("Nameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee :::::::   ${_productModel.data[0].name}");
+
+      setState(() {});
+    } catch (e) {
+      print("Errroooooooooorrr : $e");
+    }
+  }
 
   @override
   void initState() {
@@ -58,9 +75,11 @@ class _DetailsPageState extends State<DetailsPage> {
         slivers: <Widget>[
           SliverAppBar(
             shape: ContinuousRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
+            ),
             centerTitle: true,
             backgroundColor: kPrimaryColor,
             //backgroundColor: Colors.transparent,
@@ -104,7 +123,7 @@ class _DetailsPageState extends State<DetailsPage> {
           ),
         ],
       ),
-      bottomNavigationBar: addToCart(),
+      bottomNavigationBar: addToCartBottom(),
     );
   }
 
@@ -163,7 +182,7 @@ class _DetailsPageState extends State<DetailsPage> {
               tapHeaderToExpand: true,
               tapBodyToExpand: true,
               tapBodyToCollapse: true,
-              iconColor: Colors.blue,
+              iconColor: kPrimaryColor,
             ),
             header: Text(
               'Description',
@@ -225,7 +244,7 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  Widget addToCart() {
+  Widget addToCartBottom() {
     return Padding(
       padding: EdgeInsets.only(left: 16.0, right: 16.0),
       child: Row(
@@ -238,12 +257,12 @@ class _DetailsPageState extends State<DetailsPage> {
             },
             child: Container(
               height: 40,
-              width: MediaQuery.of(context).size.width*.20,
+              width: MediaQuery.of(context).size.width * .20,
               decoration: BoxDecoration(
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(20)),
               child: Icon(
-                isFavourite == false ?Icons.favorite_border: Icons.favorite,
+                isFavourite == false ? Icons.favorite_border : Icons.favorite,
                 color: kTextColorBlack,
               ),
             ),
@@ -252,24 +271,34 @@ class _DetailsPageState extends State<DetailsPage> {
             width: 10,
           ),
           Expanded(
-            child: Container(
-              height: 40.0,
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Text(
-                    'Add to Cart',
-                    style: TextStyle(color: kTextColorBlack, fontSize: 20),
+            child: InkWell(
+              onTap: () {
+                _addToCartFromDetails();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Added to Cart'),
                   ),
-                  Icon(
-                    Icons.add_shopping_cart_outlined,
-                    color: kTextColorBlack,
-                  ),
-                ],
+                );
+              },
+              child: Container(
+                height: 40.0,
+                decoration: BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text(
+                      'Add to Cart',
+                      style: TextStyle(color: kTextColorBlack, fontSize: 20),
+                    ),
+                    Icon(
+                      Icons.add_shopping_cart_outlined,
+                      color: kTextColorBlack,
+                    ),
+                  ],
+                ),
               ),
             ),
           )

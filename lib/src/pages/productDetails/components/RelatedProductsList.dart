@@ -26,6 +26,8 @@ class _RelatedProductsListState extends State<RelatedProductsList> {
             relatedProductPrice:
                 widget.relatedProducts[index].price.formattedWithCode,
             relatedProductImage: widget.relatedProducts[index].media.source,
+            productDescription: widget.relatedProducts[index].description,
+            //variantGroups: widget.relatedProducts[index].,
           );
         },
       ),

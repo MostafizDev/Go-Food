@@ -1,13 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:go_food/src/configuration.dart';
 import 'package:go_food/src/constants/themes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+String _id = "";
 class DrawerScreen extends StatefulWidget {
   @override
   _DrawerScreenState createState() => _DrawerScreenState();
 }
 
 class _DrawerScreenState extends State<DrawerScreen> {
+  var drawerMenuTextStyle = TextStyle(
+    color: kPrimaryColor,
+    fontWeight: FontWeight.bold,
+    fontSize: 20,
+  );
+  _loadSignedInCustomerId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _id = (prefs.getString('id') ?? '');
+    });
+    print('Shared Preferences Id ::: $_id');
+  }
+
+  @override
+  void initState() {
+    _loadSignedInCustomerId();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +50,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Md. Mostafizur Rahman',
+                    _id,
                     style: TextStyle(
                         color: kPrimaryColor, fontWeight: FontWeight.bold),
                   ),
@@ -43,28 +62,23 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ],
           ),
           Column(
-            children: drawerItems
-                .map((element) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Icon(
-                            element['icon'],
-                            color: Colors.black,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(element['title'],
-                              style: TextStyle(
-                                  color: kPrimaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20))
-                        ],
-                      ),
-                    ))
-                .toList(),
+            children: [
+              Row(
+                children: [
+                  Icon(
+                    Icons.favorite_border_sharp,
+                    size: 20,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'Favorites',
+                    style: drawerMenuTextStyle,
+                  ),
+                ],
+              ),
+            ],
           ),
           Row(
             children: [

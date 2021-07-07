@@ -1,7 +1,13 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:go_food/src/Services/APIClient.dart';
 import 'package:go_food/src/constants/dimentions.dart';
+import 'package:go_food/src/models/customerList.dart';
+import 'package:go_food/src/models/signInTokenGenerate.dart';
+import 'package:go_food/src/models/signInTokenIssue.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -13,6 +19,14 @@ class _SignInPageState extends State<SignInPage> {
   final myEmailController = TextEditingController();
   bool emailisValid = false;
   bool _toggleVisbility = true;
+  bool isAlreadyRegistered = true;
+
+  String _id= '';
+
+  SignInTokenGenerate signInTokenGenerate;
+  SignInTokenIssue signInTokenIssue;
+  CustomerList customerList = new CustomerList();
+
   var paddingBetweenWidget = SizedBox(
     height: Dimentions.padding16,
   );
@@ -30,11 +44,12 @@ class _SignInPageState extends State<SignInPage> {
       },
       onChanged: (value) {
         setState(() {
-          value == null ? emailisValid = false : emailisValid = true;
+          EmailValidator.validate(value) == null ? emailisValid = false : emailisValid = true;
+          //value == null ? emailisValid = false : emailisValid = true;
         });
       },
       decoration: InputDecoration(
-        hintText: "Your Email or Username",
+        hintText: "Your Email",
         hintStyle: TextStyle(
           color: Colors.grey,
         ),
@@ -42,7 +57,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _buildPasswordTextFormField() {
+  /*Widget _buildPasswordTextFormField() {
     return TextFormField(
       decoration: InputDecoration(
         hintText: "Password",
@@ -62,12 +77,59 @@ class _SignInPageState extends State<SignInPage> {
       ),
       obscureText: _toggleVisbility,
     );
+  }*/
+
+  _signInTokenGenerate(var email) async {
+    try {
+      await APIManager().customerSignInTG(email);
+      //print("Customer Id Token Generate :::   ${signInTokenGenerate.success}");
+    } catch (e) {
+      print("Error Creating Customer : $e");
+    }
+  }
+
+  _signInTokenIssue(var email) async {
+    try {
+      await APIManager().customerSignInTI(email);
+      //print("Customer Id Token Issue ::::::   ${signInTokenIssue.customerId}");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _id = email;
+        print('Shared Email :: $_id');
+      });
+      prefs.setString('id', _id);
+
+    } catch (e) {
+      print("Error Creating Customer : $e");
+    }
+  }
+
+  _customerList() async {
+    try {
+      customerList = await APIManager().customerList();
+      //print("Customer Email :::::::   ${customerList.data[0].email}");
+    } catch (e) {
+      print("Error Creating Customer : $e");
+    }
+  }
+
+  _loadSignedInCustomerId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _id = (prefs.getString('id') ?? '');
+    });
   }
 
   @override
-  Widget build(BuildContext context) {
-    print('Email is valid? ' + (emailisValid ? 'yes' : 'no'));
+  void initState() {
+    _customerList();
+    _loadSignedInCustomerId();
+    super.initState();
+  }
 
+
+  @override
+  Widget build(BuildContext context) {
     emailisValid = EmailValidator.validate(myEmailController.text);
     return Scaffold(
       body: Padding(
@@ -103,7 +165,7 @@ class _SignInPageState extends State<SignInPage> {
                 child: Column(
                   children: [
                     _buildEmailTextFormField(),
-                    _buildPasswordTextFormField(),
+                    //_buildPasswordTextFormField(),
                   ],
                 ),
               ),
@@ -117,13 +179,55 @@ class _SignInPageState extends State<SignInPage> {
                   borderRadius: BorderRadius.circular(35.0)),
               child: FlatButton(
                 onPressed: () {
-                  emailisValid
-                      ? Navigator.of(context).popAndPushNamed("/")
-                      : ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Please enter your mail'),
-                          ),
-                        );
+                  _signInTokenGenerate(myEmailController.value.text);
+                  _signInTokenIssue(myEmailController.value.text);
+
+                  for (var i = 0; i < customerList.data.length; i++) {
+                    if (customerList.data[i].email
+                        .toString()
+                        .contains(myEmailController.value.text)) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Login Success'),
+                        ),
+                      );
+                      //print("Customer Id Token Issue ::::::   ${signInTokenIssue.customerId}");
+                      //Get.toNamed('/');
+                      Navigator.of(context).popAndPushNamed("/");
+                      isAlreadyRegistered = true;
+                      break;
+                    } else if (emailisValid == false) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please enter your mail'),
+                        ),
+                      );
+                      break;
+                    } else if (myEmailController.value.text == '') {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Please enter your mail'),
+                        ),
+                      );
+                      break;
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'You don\'t have any account. Please Sign Up first'),
+                        ),
+                      );
+                      break;
+                    }
+                  }
+
+                  /*emailisValid
+                      ?  ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Please enter your mail'),
+                              ),
+                            )
+                          : Navigator.of(context).popAndPushNamed("/");*/
                 },
                 child: Text(
                   "Sign In",
